@@ -44,3 +44,4 @@ a.btn{display:block;text-align:center;text-decoration:none}
 .ex{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:14px;margin:12px 0}
 .ex table{width:100%;border-collapse:collapse;font-size:14px}.ex td,.ex th{padding:5px 3px;border-bottom:1px solid var(--bd);text-align:left}.ex .n{text-align:right}
 .foot{margin-top:32px;padding:14px;border-top:1px solid var(--bd);font-size:14px;color:var(--mut)}
+.mas h2{font-size:1rem;margin:0 0 6px;color:var(--ink)}.mas ul{margin:0;padding-left:18px}.mas li{margin:2px 0}
