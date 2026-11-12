@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hacer cotización - CotizoYa</title>
+<meta name="theme-color" content="#1f5e46">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top"><b>CotizoYa</b><a href="index.html">Inicio</a></header>
+<main>
+<section data-tab="cotizar">
+<form id="form" onsubmit="return false" autocomplete="off">
+<p class="muted">Folio: <b id="folio"></b></p>
+<fieldset><legend>Cliente</legend>
+<label for="cl-name">Nombre</label><input id="cl-name" placeholder="Ej. María López">
+<label for="cl-phone">WhatsApp del cliente (10 dígitos, opcional)</label><input id="cl-phone" type="tel" inputmode="tel" placeholder="6691234567">
+</fieldset>
+<fieldset><legend>Conceptos</legend>
+<div id="items"></div>
+<button type="button" class="btn alt" id="btn-add">+ Agregar concepto</button>
+<button type="button" class="btn alt" onclick="document.querySelector('[data-tab-btn=catalogo]').click()">Elegir del catálogo</button>
+</fieldset>
+<fieldset><legend>Ajustes</legend>
+<label class="chk"><input type="checkbox" id="iva-on"> Cobrar IVA 16%</label>
+<div id="iva-opts" hidden><label for="iva-incl">Los precios que escribí...</label>
+<select id="iva-incl"><option value="0">NO incluyen IVA (se suma)</option><option value="1">YA incluyen IVA</option></select></div>
+<div class="two"><div><label for="disc-type">Descuento</label><select id="disc-type"><option value="pct">%</option><option value="amt">$ pesos</option></select></div>
+<div><label for="disc-val">Cantidad</label><input id="disc-val" inputmode="decimal" placeholder="0"></div></div>
+<div class="two"><div><label for="adv-type">Anticipo</label><select id="adv-type"><option value="pct">%</option><option value="amt">$ pesos</option></select></div>
+<div><label for="adv-val">Cantidad</label><input id="adv-val" inputmode="decimal" placeholder="0"></div></div>
+<label for="valid">Vigencia (días)</label><input id="valid" inputmode="numeric" placeholder="15">
+<label for="notes">Notas y condiciones</label><textarea id="notes" placeholder="Ej. Incluye material. Garantía de 3 meses."></textarea>
+</fieldset>
+<div id="totals"></div><p id="t-letra"></p>
+<button type="button" class="btn alt" id="btn-prev">Vista previa</button>
+<button type="button" class="btn" id="btn-pdf">Descargar PDF</button>
+<button type="button" class="btn wa" id="btn-wa">Enviar por WhatsApp</button>
+<button type="button" class="btn alt" id="btn-save">Guardar sin PDF</button>
+<button type="button" class="btn alt" id="btn-new">Nueva cotización</button>
+</form>
+</section>
+<section data-tab="historial" hidden><h2>Historial</h2><p class="muted">Guardado solo en este teléfono.</p><ul class="list" id="hist-list"></ul></section>
+<section data-tab="catalogo" hidden><h2>Conceptos frecuentes</h2>
+<form id="cat-form" class="card" autocomplete="off">
+<label for="c-desc">Concepto</label><input id="c-desc" placeholder="Ej. Mantenimiento de minisplit">
+<div class="two"><div><label for="c-unit">Unidad</label><input id="c-unit" list="unitlist" placeholder="servicio"></div>
+<div><label for="c-price">Precio $</label><input id="c-price" inputmode="decimal" placeholder="0.00"></div></div>
+<button class="btn" type="submit">Guardar concepto</button></form>
+<ul class="list" id="cat-list"></ul></section>
+<section data-tab="negocio" hidden><h2>Mi negocio</h2><p class="muted">Aparece en tus PDF. Se guarda solo en este teléfono.</p>
+<form id="biz-form" class="card" onsubmit="return false" autocomplete="off">
+<label for="b-name">Nombre del negocio o tuyo</label><input id="b-name" placeholder="Ej. Eléctrica Rodríguez">
+<label for="b-phone">Teléfono / WhatsApp</label><input id="b-phone" type="tel" inputmode="tel">
+<label for="b-email">Correo (opcional)</label><input id="b-email" type="email">
+<label for="b-logo">Logo (opcional)</label><input id="b-logo" type="file" accept="image/*">
+<img id="logo-prev" alt="Logo" hidden style="max-height:70px;margin-top:8px"><button type="button" class="mini danger" id="logo-del" hidden>Quitar logo</button>
+</form>
+<p class="muted">Tus datos nunca salen de este dispositivo: no hay cuenta ni servidor.</p></section>
+</main>
+
+<datalist id="catlist"></datalist>
+<datalist id="unitlist"><option value="pza"><option value="servicio"><option value="hora"><option value="día"><option value="m"><option value="m²"><option value="kg"><option value="lote"><option value="visita"></datalist>
+
+<nav class="bottom"><button data-tab-btn="cotizar">Cotizar</button><button data-tab-btn="historial">Historial</button><button data-tab-btn="catalogo">Catálogo</button><button data-tab-btn="negocio">Mi negocio</button></nav>
+
+<div class="modal" id="m-prev" hidden><div class="box"><div id="sheet"></div><button class="btn" data-close="m-prev">Cerrar</button></div></div>
+<div class="modal" id="m-wa" hidden><div class="box"><h3>PDF descargado</h3><p>Tu navegador no puede compartir el archivo directo. Abre WhatsApp y adjunta el PDF que se acaba de descargar (carpeta Descargas).</p>
+<a class="btn wa" id="wa-link" href="#" target="_blank" rel="noopener">Abrir WhatsApp con el resumen</a><button class="btn alt" data-close="m-wa">Cerrar</button></div></div>
+<div id="toast" role="status" hidden></div>
+<script src="vendor/jspdf.umd.min.js"></script>
+<script src="js/calc.js"></script>
+<script src="js/pdf.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

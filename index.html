@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CotizoYa - Cotizaciones gratis en PDF para mandar por WhatsApp</title>
+<meta name="description" content="Haz una cotización profesional en 1 minuto desde tu celular y mándala por WhatsApp en PDF. Gratis, sin registro, con IVA, anticipo y total en letra.">
+<meta name="theme-color" content="#1f5e46">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top"><b>CotizoYa</b><a href="app.html">Abrir la app</a></header>
+<main>
+<div class="hero">
+<h1>Cotizaciones profesionales en 1 minuto, gratis.</h1>
+<p>CotizoYa es una herramienta gratuita para electricistas, plomeros, técnicos, herreros, diseñadores y freelancers de México. Llenas tus conceptos desde el celular y obtienes un PDF con IVA, descuento, anticipo y total en letra. Lo mandas por WhatsApp sin registrarte: tus datos se quedan en tu teléfono.</p>
+<a class="btn" href="app.html">Hacer mi cotización</a>
+</div>
+
+<h2>Así se ve una cotización</h2>
+<p class="muted">Ejemplo con datos ficticios, calculado por la misma app (no es un cliente real).</p>
+<div class="ex" id="ex"><noscript>Activa JavaScript para ver el ejemplo, o abre el PDF de abajo.</noscript></div>
+<a class="btn alt" href="ejemplo-cotizacion.pdf">Ver el PDF de ejemplo</a>
+
+<h2>Qué incluye, gratis</h2>
+<ul>
+<li>Folio consecutivo, fecha y vigencia.</li>
+<li>IVA 16% opcional (con precios con o sin IVA incluido).</li>
+<li>Descuento, anticipo y saldo.</li>
+<li>Total en letra ("mil doscientos pesos 00/100 M.N.").</li>
+<li>Historial, duplicar cotizaciones y catálogo de conceptos frecuentes.</li>
+<li>Funciona sin internet una vez abierta, y puedes instalarla en tu pantalla de inicio.</li>
+</ul>
+
+<div class="foot">
+<p><b>¿Necesitas página web o que WhatsApp conteste solo?</b><br>Hecho por Jesús Rodríguez, Mazatlán.<br>
+<a href="https://wa.me/526695939300">WhatsApp: 669 593 9300</a> - <a href="mailto:bussnestjesus2005@gmail.com">bussnestjesus2005@gmail.com</a></p>
+</div>
+</main>
+<script src="js/calc.js"></script>
+<script>
+(function () {
+  var q = { items: [
+    { desc: 'Cambio de interruptor termomagnético 2x20A', qty: 1, unit: 'pza', price: 480 },
+    { desc: 'Instalación de contacto doble polarizado', qty: 4, unit: 'pza', price: 350 },
+    { desc: 'Cable THW cal. 12 (material)', qty: 25, unit: 'm', price: 18.5 },
+    { desc: 'Mano de obra', qty: 1, unit: 'servicio', price: 800 } ],
+    ivaOn: true, ivaIncluded: false, discType: 'pct', discVal: 5, advType: 'pct', advVal: 50 };
+  var r = CF.compute(q), M = CF.money;
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var rows = q.items.map(function (i, k) { return '<tr><td>' + CF.qtyFmt(i.qty) + ' ' + i.unit + '</td><td>' + esc(i.desc) + '</td><td class="n">' + M(r.lines[k]) + '</td></tr>'; }).join('');
+  document.getElementById('ex').innerHTML = '<b>COTIZACIÓN COT-0001</b> - Eléctrica Ejemplo<br><span class="muted">Para: Cliente de ejemplo</span><table>' + rows + '</table>' +
+    '<table><tr><td>Subtotal</td><td class="n">' + M(r.subtotal) + '</td></tr><tr><td>Descuento 5%</td><td class="n">-' + M(r.discount) + '</td></tr><tr><td>Subtotal sin IVA</td><td class="n">' + M(r.base) + '</td></tr><tr><td>IVA 16%</td><td class="n">' + M(r.iva) + '</td></tr>' +
+    '<tr><td><b>TOTAL</b></td><td class="n"><b id="ex-total">' + M(r.total) + '</b></td></tr><tr><td>Anticipo 50%</td><td class="n">' + M(r.advance) + '</td></tr><tr><td>Saldo</td><td class="n">' + M(r.balance) + '</td></tr></table>' +
+    '<p class="muted">(' + CF.totalEnLetra(r.total) + ')</p>';
+})();
+</script>
+</body>
+</html>
