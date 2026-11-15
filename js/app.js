@@ -268,7 +268,26 @@
   // ---------- arranque ----------
   q = store.get('cf_draft', null);
   if (!q || !q.items) q = blankQuote();
+  // plantilla por oficio: app.html?plantilla=electricista (js/plantillas.js). Carga conceptos SIN precio.
+  var tplMsg = '';
+  (function () {
+    var m = /[?&]plantilla=([a-z-]+)/.exec(location.search), P = window.CFplantillas;
+    var p = m && P && Object.prototype.hasOwnProperty.call(P, m[1]) ? P[m[1]] : null;
+    if (!p) return;
+    try { history.replaceState(null, '', location.pathname); } catch (e) { /* sin historial */ }
+    var sinTocar = q.tpl === m[1] && !q.client.name && !q.client.phone && q.items.every(function (i) { return !CF.parseNum(i.price); });
+    if (sinTocar) return;
+    if (!isEmpty(q)) {
+      var guardada = hist.some(function (h) { return h.id === q.id; });
+      if (!guardada && !confirm('Tienes una cotización sin guardar. ¿Cambiarla por el formato de ' + p.nombre + '?')) return;
+      q = blankQuote();
+    }
+    q.date = today(); q.tpl = m[1]; q.notes = p.notas;
+    q.items = p.items.map(function (i) { return { desc: i.desc, qty: i.qty, unit: i.unit, price: '' }; });
+    tplMsg = 'Formato de ' + p.nombre + ' cargado. Pon tus precios.';
+  })();
   fillBiz(); refreshDatalist(); fillForm(); showTab('cotizar');
+  if (tplMsg) toast(tplMsg);
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
     navigator.serviceWorker.register('sw.js').catch(function () { });
   }

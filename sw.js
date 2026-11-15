@@ -1,5 +1,5 @@
-const V = 'cotizoya-v3';
-const FILES = ['./', 'index.html', 'app.html', 'css/style.css', 'js/calc.js', 'js/pdf.js', 'js/app.js', 'vendor/jspdf.umd.min.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'ejemplo-cotizacion.pdf'];
+const V = 'cotizoya-v4';
+const FILES = ['./', 'index.html', 'app.html', 'css/style.css', 'js/calc.js', 'js/pdf.js', 'js/app.js', 'js/plantillas.js', 'vendor/jspdf.umd.min.js', 'manifest.webmanifest', 'icons/icon-192.png', 'icons/icon-512.png', 'ejemplo-cotizacion.pdf', 'cotizacion-electricista/', 'cotizacion-plomero/', 'cotizacion-aire-acondicionado/'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(V).then(c => Promise.all(FILES.map(f => c.add(f).catch(() => {})))).then(() => self.skipWaiting()));
 });
